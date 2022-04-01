@@ -66,24 +66,55 @@ async function seed() {
         }
     ]
     })
+
+    const post1 = await prisma.post.findUnique({
+        where: {
+          id: 1,
+        },
+      })
+
+      const post2 = await prisma.post.findUnique({
+        where: {
+          id: 2,
+        },
+      })
+
+      const post3 = await prisma.post.findUnique({
+        where: {
+          id: 3,
+        },
+      })
     
-    const createComments = await prisma.comment.createMany({
-        data: [{
-            content: "You suck",
-            postId: 1,
-            userId: 2
+    const createComments1 = await prisma.comment.create({
+        data: {
+            content: "This is my first comment",
+            postId: post1.id,
+            userId: user2.id, 
+            subComments : {
+                create : [{
+                    content: "You suck",
+                    postId: post1.id,
+                    userId: user1.id
+                }
+            ]
+            }     
         },
-        {
-            content: "Boooo",
-            postId: 3,
-            userId: 1
+    })
+
+    const createComments2 = await prisma.comment.create({
+        data: {
+            content: "Banging blog post mate",
+            postId: post2.id,
+            userId: user1.id, 
+            subComments : {
+                create : [{
+                    content: "I disagree",
+                    postId: post2.id,
+                    userId: user2.id
+                }
+            ]
+            }     
         },
-        {
-            content: "Insert some sexist comment here",
-            postId: 2,
-            userId: 2
-        }
-    ]
     })
 
 
